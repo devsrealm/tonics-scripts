@@ -67,10 +67,6 @@ Own Custom DNS Directly From The Server, and the provision of necessary packages
 
 " | boxes -d columns
 
-#   This checks if the web server is installed
-#   If No, It asks to be installed
-installNginx
-
 #
 #   If we got here, they must have supplied a filename.  Store it away
 #

@@ -21,7 +21,7 @@ db_local=/etc/bind/db.local
 installBind() {
   #
   #   Berkeley Internet Name Domain or Bind is a service that allows the publication
-  #   of DNS information on the internet, it also faciliate the resolving of DNS queries
+  #   of DNS information on the internet, it also facilitate the resolving of DNS queries
   #   Since Bind is the most popular DNS program, this is what we would be using.
   #
   if command -v named 2>>"${logfile}" >/dev/null; then
@@ -337,7 +337,7 @@ zone_add() {
   echo
   #
   #   $'\t' is an ANSI-C quoting, this would make us tab the read prompt, instead of relying on echo
-  #   I should probaly change the rest of the code to follow this syntax
+  #   I should probably change the rest of the code to follow this syntax
   #
   echo -e "Your Domain Name is $websitename\n"
   if yes_no "Is That Correct "; then
