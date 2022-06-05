@@ -27,6 +27,6 @@ The installation is easy:
 
 ### Run The Program, and Configure Away
 
-> ./cp yourwebsite.com
+> ./tonicsScripts yourwebsite.com
 
 *Note: Make Sure You Always Add a Top Level Domain, i.e .com, .net, etc*
