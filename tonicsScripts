@@ -56,3 +56,85 @@ site_enabled="/etc/nginx/sites-enabled"
 
 sudo apt-get -y install boxes 2>>${logfile} >/dev/null &
 spinner
+echo "
+
+A CommandLine Control Panel That Handles The Automation of
+Tonics App Installation, Offers The Ability To Manage Your
+Own Custom DNS Directly From The Server, and the provision of necessary packages.
+
+                       By DevsrealmGuy (Ahmed Olayemi Faruq)
+                       https://devsrealm.com/
+
+" | boxes -d columns
+
+#   This checks if the web server is installed
+#   If No, It asks to be installed
+installNginx
+
+#
+#   If we got here, they must have supplied a filename.  Store it away
+#
+websitename=$1
+websitenameRegexCheck=$(echo "$websitename" | grep -P '(?=^.{1,254}$)(^(?>(?!\d+\.)[a-zA-Z0-9_\-]{1,63}\.?)+(?:[a-zA-Z]{2,})$)')
+
+if [[ ! $websitenameRegexCheck ]]; then # If the host name is null, we exit
+  echo -e "The Domain Name Entered Should Be In The Format: domain.com or subdomain.example.com or a name that qualifies as a domain name"
+  exit 1
+fi
+
+#
+#   Loop forever - until the user decides to exit the program
+#
+while :; do
+  clear
+  #
+  #   Display the menu
+  #
+  echo "
+
+       CommandLine ControlPanel Installation
+                  Main Menu
+
+What do you wish to do?
+1.) Create an SFTP User
+2.) Manage DNS
+3.) Exit
+
+    " | boxes -d columns
+  #
+  #   Prompt for an answer
+  #
+  echo -e "Answer (or 'q' to quit): \c?"
+  read -r ans junk
+
+  #
+  #   Empty answers (pressing ENTER) cause the menu to redisplay,
+  #   so, this goes back around the loop
+  #   We only make it to the "continue" bit if the "test"
+  #   program ("[") returned 0 (True)
+  #
+  [ "$ans" = "" ] && continue
+
+  #
+  #   Decide what to do
+  #
+  case $ans in
+  1)
+    sftp
+    ;;
+  2)
+    dns
+    ;;
+  3)
+    quit 0
+    ;;
+  q* | Q*)
+    quit 0
+    ;;
+  *) echo -e "please enter a number between 1 and 3" ;;
+  esac
+  #
+  #   Pause to give the user a chance to see what's on the screen, this way, we won't lose some infos
+  #
+  pause
+done
