@@ -42,6 +42,7 @@ installBind() {
 
 dns() {
 
+  # ress
   clear
 
   installBind
