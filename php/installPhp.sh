@@ -8,21 +8,17 @@ installPhp() {
     echo -e "PHP Seems To Be Missing"
     if yes_no "Install PHP"; then
       echo -e "This might take a little while (Sit Back and Relax)"
-      sudo apt install software-properties-common 2>>"${logfile}" >/dev/null &
+      sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common gnupg2 2>>"${logfile}" >/dev/null &
       wait $!
-      sudo add-apt-repository ppa:ondrej/php -y 2>>"${logfile}" >/dev/null &
-      wait $!
-      sudo add-apt-repository ppa:ondrej/nginx -y 2>>"${logfile}" >/dev/null &
-      wait $!
+      echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/sury-php.list
+      wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
       sudo apt update 2>>"${logfile}" >/dev/null &
+      sudo apt upgrade -y 2>>"${logfile}" >/dev/null &
       wait $!
       spinner
 
       echo -e "Installing PHP\n"
-      sudo apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-gmp php${PHP_VERSION}-fpm php${PHP_VERSION}-mysql \
-        php${PHP_VERSION}-xml php${PHP_VERSION}-curl php${PHP_VERSION}-gd \
-        php${PHP_VERSION}-bcmath php${PHP_VERSION}-cli php${PHP_VERSION}-mbstring \
-        php${PHP_VERSION}-apcu php${PHP_VERSION}-mbstring php${PHP_VERSION}-readline php${PHP_VERSION}-intl php${PHP_VERSION}-zip 2>>"${logfile}" >/dev/null &
+      sudo apt-get -y install php${PHP_VERSION}-{gmp,bcmath,readline,fpm,xml,mysql,zip,intl,ldap,gd,cli,apcu,bz2,curl,mbstring,pgsql,opcache,soap,cgi} 2>>"${logfile}" >/dev/null &
       wait $!
       # Spinning, While the program installs
       spinner
