@@ -90,6 +90,7 @@ configureNginxWithCaching() {
 }
 
 configureNginxSpool() {
+  PHP_VERSION=8.1
   installPhp
   echo -e "Configuring The Spool"
   # CHANGING THE onlysitename to the actual site name in NGINX POOL DIRECTORY
