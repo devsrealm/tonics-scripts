@@ -15,12 +15,11 @@ install_certbot() {
     echo -e "Certbot Seems To Be Missing\n"
     if yes_no "Install Certbot"; then
       sudo apt-get update 2>>"${logfile}" >/dev/null &
-      sudo snap install --classic certbot 2>>"${logfile}" >/dev/null &
+      sudo apt-get -y install certbot 2>>"${logfile}" >/dev/null &
       wait $!
 
       # Spinning, While the program installs
       spinner
-      sudo ln -s /snap/bin/certbot /usr/bin/certbot
       # reload nginx
       sudo systemctl enable nginx 2>>"${logfile}" >/dev/null &
       sudo systemctl reload nginx 2>>"${logfile}" >/dev/null &

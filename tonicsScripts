@@ -33,6 +33,7 @@ source mariadb/installMariadb.sh
 source mailserver/opendkim/opendkimInstall.sh
 source mailserver/installMailServer.sh
 source nginx/installNginx.sh
+source tonics_app/tonics.sh
 source sftp/installSftp.sh
 source php/installPhp.sh
 source certbot/installCertbot.sh
@@ -94,7 +95,9 @@ while :; do
 What do you wish to do?
 1.) Create an SFTP User
 2.) Manage DNS
-3.) Exit
+3.) Install Tonics
+4.) Secure Site With Let's Encrypt SSL
+5.) Exit
 
     " | boxes -d columns
   #
@@ -122,12 +125,18 @@ What do you wish to do?
     dns
     ;;
   3)
+    tonics_app_create
+    ;;
+  4)
+    website_secure
+    ;;
+  5)
     quit 0
     ;;
   q* | Q*)
     quit 0
     ;;
-  *) echo -e "please enter a number between 1 and 3" ;;
+  *) echo -e "please enter a number between 1 and 5" ;;
   esac
   #
   #   Pause to give the user a chance to see what's on the screen, this way, we won't lose some infos

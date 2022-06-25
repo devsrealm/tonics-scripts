@@ -2,7 +2,8 @@ server {
         ## Your website name goes here.
         server_name domain.tld;
         ## Your only path reference.
-        root /var/www/tonics;
+        root /var/www/tonics/web/public;
+        client_max_body_size 900M;
         ## This should be in your http block and if it is, it's not needed here.
         index index.php;
 
@@ -17,10 +18,13 @@ server {
                 access_log off;
         }
 
+        # DISALLOW PHP EXECUTION IN THE UPLOAD FOLDER
+        location ~ /uploads/.*\.php$ {
+                return 403;
+        }
+
         location / {
-                # This is cool because no php is touched for static content.
-                # include the "?$args" part so non-default permalinks doesn't break when using query string
-                try_files $uri $uri/ /index.php?$args;
+                try_files $uri $uri/ /index.php?$query_string;
         }
 
         location ~ \.php$ {
@@ -37,6 +41,24 @@ server {
             fastcgi_cache_min_uses 1;
             fastcgi_cache_lock on;
             add_header X-FastCGI-Cache $upstream_cache_status;
+        }
+
+        # NGINX X-Accel Download Redirection Settings
+        location /download {
+           internal;
+            alias /var/www/tonics/private;
+        }
+
+        # NGINX X-Accel For Themes
+        location /themes {
+             internal;
+             alias /var/www/tonics/web/src/Themes;
+        }
+
+        # NGINX X-Accel For Plugins
+        location /plugins {
+             internal;
+             alias /var/www/tonics/web/src/Plugins;
         }
 
         # A long browser cache lifetime can speed up repeat visits to your page

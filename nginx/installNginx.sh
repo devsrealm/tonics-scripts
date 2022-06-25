@@ -9,7 +9,6 @@ installNginx() {
   if command -v nginx 2>>"${logfile}" >/dev/null; then
     echo
     echo -e "Nginx is available\n"
-
   else
     #
     #   Ask if it should be created
