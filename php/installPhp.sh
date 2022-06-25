@@ -1,4 +1,5 @@
 installPhp() {
+  PHP_VERSION=8.1
   if command -v php 2>>"${logfile}" >/dev/null; then
     echo
     echo -e "PHP is available\n"
