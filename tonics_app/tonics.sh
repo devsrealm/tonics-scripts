@@ -131,14 +131,6 @@ install_tonics() {
   # Storing Tonics Variables To Proceed
   #
 
-  echo "
-Note: If You are Planning To Migrate or Move an Existing Website To This Server,
-Please Make Sure The Database Name, User and Password You are Inputting
-Corresponds To What is in your env,
-Check The env of The Old Website File To Cross Check The Details.
-If This is a New Website, Then Create a New Details, Good luck!
-" | boxes -d columns
-
   TonicsDBName=
   while [[ $TonicsDBName == "" ]]; do
     echo -e "Enter Tonics Database name: \c"
@@ -240,8 +232,10 @@ MYSQL_SCRIPT
         #   Extract the file, and extract it into a folder
         #
         sudo apt-get -y install unzip 2>>"${logfile}" >/dev/null &
+        wait $! # Wait For the Above Process
 
-        mkdir -p "$TMPDIR"/tonics && unzip "$TMPDIR"/tonicslatest.zip -d "$TMPDIR"/tonics 2>>"${logfile}" &
+        mkdir -p "$TMPDIR"/tonics 2>>"${logfile}" >/dev/null &
+        unzip "$TMPDIR"/tonicslatest.zip -d "$TMPDIR"/tonics 2>>"${logfile}" &
         wait $! # Wait For the Above Process
         handleError $? "Couldn't Extract Tonics Into a Temporary Folder"
 
