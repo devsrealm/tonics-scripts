@@ -90,6 +90,7 @@ configureNginxWithCaching() {
 }
 
 configureNginxSpool() {
+  installPhp
   echo -e "Configuring The Spool"
   # CHANGING THE onlysitename to the actual site name in NGINX POOL DIRECTORY
   TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1

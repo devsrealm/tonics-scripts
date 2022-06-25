@@ -8,6 +8,7 @@ tonics_app_create() {
 #   This checks if the web server is installed
 #   If No, It asks to be installed
   installNginx
+  installPhp
   #
 #   Check if the filename represents a valid file.
 #
