@@ -12,6 +12,7 @@ installPhp() {
       wait $!
 
       sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+      mkdir -p "/etc/apt/sources.list.d"
       echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/sury-php.list
 
       sudo apt update 2>>"${logfile}" >/dev/null &
@@ -20,7 +21,7 @@ installPhp() {
       spinner
 
       echo -e "Installing PHP\n"
-      sudo apt-get -y install php${PHP_VERSION}-{gmp,bcmath,readline,fpm,xml,mysql,zip,intl,ldap,gd,cli,apcu,bz2,curl,mbstring,pgsql,opcache,soap,cgi} 2>>"${logfile}" >/dev/null &
+      sudo apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-{gmp,bcmath,readline,fpm,xml,mysql,zip,intl,ldap,gd,cli,apcu,bz2,curl,mbstring,pgsql,opcache,soap,cgi} 2>>"${logfile}" >/dev/null &
       wait $!
       # Spinning, While the program installs
       spinner
