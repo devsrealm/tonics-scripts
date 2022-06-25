@@ -21,7 +21,10 @@ installPhp() {
       spinner
 
       echo -e "Installing PHP\n"
-      sudo apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-{gmp,bcmath,readline,fpm,xml,mysql,zip,intl,ldap,gd,cli,apcu,bz2,curl,mbstring,pgsql,opcache,soap,cgi} 2>>"${logfile}" >/dev/null &
+      sudo apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-gmp php${PHP_VERSION}-fpm php${PHP_VERSION}-mysql \
+        php${PHP_VERSION}-xml php${PHP_VERSION}-curl php${PHP_VERSION}-gd \
+        php${PHP_VERSION}-bcmath php${PHP_VERSION}-cli php${PHP_VERSION}-mbstring \
+        php${PHP_VERSION}-apcu php${PHP_VERSION}-mbstring php${PHP_VERSION}-readline php${PHP_VERSION}-intl php${PHP_VERSION}-zip 2>>"${logfile}" >/dev/null &
       wait $!
       # Spinning, While the program installs
       spinner
