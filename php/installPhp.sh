@@ -10,8 +10,10 @@ installPhp() {
       echo -e "This might take a little while (Sit Back and Relax)"
       sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common gnupg2 2>>"${logfile}" >/dev/null &
       wait $!
-      echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/sury-php.list
-      wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
+
+      sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+      echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/sury-php.list
+
       sudo apt update 2>>"${logfile}" >/dev/null &
       sudo apt upgrade -y 2>>"${logfile}" >/dev/null &
       wait $!
