@@ -266,6 +266,7 @@ MYSQL_SCRIPT
         #   Change directory and file user and group to www-data
         #
 
+        sudo useradd $onlysitename
         chown -R "$onlysitename:$onlysitename" /var/www/"$websitename"
 
         #
@@ -298,9 +299,9 @@ MYSQL_SCRIPT
 
         echo -e "Writing Tonics config file with collected config data...\n"
 
-        sed -i "s/database_name_here/$TonicsDBName/" /var/www/"$websitename"/web/.env
-        sed -i "s/username_here/$TonicsUser/" /var/www/"$websitename"/web/.env
-        sed -i "s/password_here/$TonicsPass/" /var/www/"$websitename"/web/.env
+        sed -i "s/db_databasename_here/$TonicsDBName/" /var/www/"$websitename"/web/.env
+        sed -i "s/db_username_here/$TonicsUser/" /var/www/"$websitename"/web/.env
+        sed -i "s/db_password_here/$TonicsPass/" /var/www/"$websitename"/web/.env
 
         progress_bar
         # reload nginx

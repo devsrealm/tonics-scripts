@@ -340,12 +340,7 @@ zone_add() {
   #   $'\t' is an ANSI-C quoting, this would make us tab the read prompt, instead of relying on echo
   #   I should probably change the rest of the code to follow this syntax
   #
-  echo -e "Your Domain Name is $websitename\n"
-  if yes_no "Is That Correct "; then
-    echo -e "$websitename Has Been Chosen as Your Domain Zone Name"
-    read -rp "Enter IP address Of Domain (The IP of the Server Hosting The Domain): " DomainIP
 
-  else
     read -rp "Enter Domain Name (FQDN), e.g, example.com: " websitename
     read -rp "Enter IP address Of Domain (The IP of the Server Hosting The Domain): " DomainIP
 
@@ -364,7 +359,7 @@ zone \"$websitename\" {
     file \"/etc/bind/db.$websitename\";
 };" >>"$TMPFILE"
 
-    sudo cp -f "$TMPFILE" $named_local # move the temp to nginx.conf
+    sudo cp -f "$TMPFILE" $named_local # move the temp to $named_local
     # remove the tempfile
     rm "$TMPFILE"
 
@@ -438,9 +433,7 @@ _dmarc  IN      TXT     \"v=DMARC1; p=quarantine; pct=100\"" >"$TMPFILE"
 
     sudo ufw allow 53/tcp
     sudo ufw allow 53/udp
-  fi
-
-  fi
+    fi
 }
 
 zone_edit() {

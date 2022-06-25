@@ -182,17 +182,20 @@ function addUserAccount() {
 }
 
 askForOnlySiteName() {
-  while :; do # Unless Password Matches, Keep Looping
-    echo -e "Enter only site name (e.g if the site name is google.com, enter only google) \c?"
-    read -r onlysitename
-    echo -e "Enter Again \c?"
-    read -r onlysitename2
 
-    if [ "$onlysitename" != "$onlysitename2" ]; then
-      echo -e "Site name doesn't match"
-    else
-      echo -e "Matches, Moving On..."
-      break
-    fi
+  while [[ $onlysitename == "" ]]; do
+        while :; do # Unless Password Matches, Keep Looping
+          echo -e "Enter only site name (e.g if the site name is google.com, enter only google) \c?"
+          read -r onlysitename
+          echo -e "Enter Again \c?"
+          read -r onlysitename2
+
+          if [ "$onlysitename" != "$onlysitename2" ]; then
+            echo -e "Site name doesn't match"
+          else
+            echo -e "Matches, Moving On..."
+            break
+          fi
+        done
   done
 }
