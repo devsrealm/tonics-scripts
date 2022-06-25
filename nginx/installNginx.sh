@@ -16,6 +16,7 @@ installNginx() {
     echo
     echo -e "Nginx Seems To Be Missing\n"
     if yes_no "Install Nginx Web Server"; then
+      sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common gnupg2 2>>"${logfile}" >/dev/null &
       echo -e "Installing Nginx From The Official Nginx Repo"
       sudo wget https://nginx.org/keys/nginx_signing.key 2>>"${logfile}" >/dev/null &
       wait $!

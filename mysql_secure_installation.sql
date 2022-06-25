@@ -1,4 +1,4 @@
-UPDATE mysql.user SET Password=PASSWORD('123456789') WHERE User='root';
+SET PASSWORD FOR root@localhost = PASSWORD('123456789');
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DROP DATABASE IF EXISTS test;
