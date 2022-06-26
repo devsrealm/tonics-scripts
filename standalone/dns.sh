@@ -49,7 +49,7 @@ dns() {
 
   # add defaults if not available
   if [ ! -f "$named_conf_options" ]; then
-    sudo cp -f "standalone/bind/named.conf.local" /etc/bind/named.conf.local
+    sudo cp -f "standalone/bind/named.conf.options" /etc/bind/named.conf.options
   fi
 
   if [ ! -f "$named_conf" ]; then
