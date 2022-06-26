@@ -59,10 +59,4 @@ server {
              internal;
              alias /var/www/tonics/web/src/Plugins;
         }
-
-        # A long browser cache lifetime can speed up repeat visits to your page
-        location ~* \.(js|css|png|jpg|jpeg|gif|ico|webp|svg|woff|woff2|xml|ttf)$ {
-                expires max;
-                log_not_found off;
-        }
 }
