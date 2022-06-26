@@ -234,8 +234,7 @@ MYSQL_SCRIPT
     #
     echo "
 1.) Install Tonics
-2.) Reset File Permissions
-3.) Exit
+2.) Exit
 
 " | boxes -d columns
 
@@ -341,14 +340,11 @@ MYSQL_SCRIPT
       fi
       ;;
     2)
-      resetFilePermissions
-      ;;
-    3)
       return 0
       ;;
     *)
       echo
-      echo -e "please enter a number between 1 and 3"
+      echo -e "please enter a number between 1 and 2"
       pause
       echo
       ;;
