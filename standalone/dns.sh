@@ -129,6 +129,14 @@ therefore it improves the performance and efficiency of the DNS server
 
   if yes_no "Do You Want To Configuring Caching name server"; then
 
+      if [ ! -f "$named_conf_options" ]; then
+        sudo cp -f "standalone/bind/named.conf.local" /etc/bind/named.conf.local
+      fi
+
+      if [ ! -f "$named_conf" ]; then
+        sudo cp -f "standalone/bind/named.conf" /etc/bind/named.conf
+      fi
+
     if [ -f "$named_conf_options" ]; then # If file exist
       sudo cp -f "standalone/bind/named.conf.options" /etc/bind/named.conf.options
       systemctl restart bind9
@@ -312,7 +320,7 @@ In the following section, you enter the master Ip like so: '10.66.66.44;' (make 
   done
 
   TMPFILE=$(mktemp /tmp/named.conf.local.XXXXXXXX) || exit 1
-  sed -e "s/masterIP/$masterIP2/g" -e "s/domainname/$nameserver/g" <bind/slave.conf.local >"$TMPFILE"
+  sed -e "s/masterIP/$masterIP2/g" -e "s/domainname/$nameserver/g" <standalone/bind/slave.conf.local >"$TMPFILE"
   sudo cp -f "$TMPFILE" "/etc/bind/named.conf.local"
   rm -r "$TMPFILE"
 
