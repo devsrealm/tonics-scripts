@@ -15,7 +15,7 @@ install_certbot() {
     echo -e "Certbot Seems To Be Missing\n"
     if yes_no "Install Certbot"; then
       sudo apt-get update 2>>"${logfile}" >/dev/null &
-      sudo apt-get -y install certbot 2>>"${logfile}" >/dev/null &
+      sudo apt-get -y install certbot python3-certbot-nginx 2>>"${logfile}" >/dev/null &
       wait $!
 
       # Spinning, While the program installs
@@ -52,7 +52,7 @@ issueSSLCert() {
 #
 website_secure() {
   if yes_no "Do you want to secure another website"; then
-    read -rp "The Name of New Website You want to secure: " websitename
+    read -rp "The Name of New Website You want to secure e.g example.com: " websitename
     #
     # Call The install_certbot function
     #

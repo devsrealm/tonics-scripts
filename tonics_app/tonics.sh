@@ -1,3 +1,38 @@
+resetFilePermissions() {
+  askForOnlySiteName
+
+  while [[ $websitename == "" ]]; do
+    echo
+    read -rp "Seems, we lost the websitename, re-enter it: " websitename
+  done
+
+  chown -R "$onlysitename:$onlysitename" /var/www/"$websitename"
+
+  #
+  #   Change permission of all directory and file under websitename
+  #
+  find /var/www/"$websitename" -type d -exec chmod 755 {} \;
+  find /var/www/"$websitename" -type f -exec chmod 644 {} \;
+
+  #
+  #   Change permission of env file
+  #
+  chmod 660 /var/www/"$websitename"/web/.env
+
+  #
+  #   Allow Tonics To Manage private uploads
+  #
+
+  find /var/www/"$websitename"/private -type d -exec chmod 775 {} \;
+  find /var/www/"$websitename"/private -type f -exec chmod 664 {} \;
+
+  #
+  #   Allow Tonics To Manage public contents
+  #
+  find /var/www/"$websitename"/web/public -type d -exec chmod 775 {} \;
+  find /var/www/"$websitename"/web/public -type f -exec chmod 664 {} \;
+}
+
 #
 #   tonics_app_create()
 #
@@ -199,7 +234,8 @@ MYSQL_SCRIPT
     #
     echo "
 1.) Install Tonics
-2.) Exit
+2.) Reset File Permissions
+3.) Exit
 
 " | boxes -d columns
 
@@ -266,32 +302,8 @@ MYSQL_SCRIPT
         #   Change directory and file user and group to www-data
         #
 
-        sudo useradd $onlysitename
-        chown -R "$onlysitename:$onlysitename" /var/www/"$websitename"
-
-        #
-        #   Change permission of all directory and file under websitename
-        #
-        find /var/www/"$websitename" -type d -exec chmod 755 {} \;
-        find /var/www/"$websitename" -type f -exec chmod 644 {} \;
-
-        #
-        #   Change permission of env file
-        #
-        chmod 660 /var/www/"$websitename"/web/.env
-
-        #
-        #   Allow Tonics To Manage private uploads
-        #
-
-        find /var/www/"$websitename"/private -type d -exec chmod 775 {} \;
-        find /var/www/"$websitename"/private -type f -exec chmod 664 {} \;
-        
-        #
-        #   Allow Tonics To Manage public contents
-        #
-        find /var/www/"$websitename"/web/public -type d -exec chmod 775 {} \;
-        find /var/www/"$websitename"/web/public -type f -exec chmod 664 {} \;
+        sudo useradd "$onlysitename"
+        resetFilePermissions
 
         #
         #   Writing ClassicPress config file with collected config data
@@ -329,11 +341,14 @@ MYSQL_SCRIPT
       fi
       ;;
     2)
+      resetFilePermissions
+      ;;
+    3)
       return 0
       ;;
     *)
       echo
-      echo -e "please enter a number between 1 and 2"
+      echo -e "please enter a number between 1 and 3"
       pause
       echo
       ;;
