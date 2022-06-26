@@ -290,11 +290,6 @@ create_secondary_dns() {
     fi
   done
 
-  TMPFILE=$(mktemp /tmp/named.conf.local.XXXXXXXX) || exit 1
-  sed -e "s/domainname/$nameserver/g" <bind/named.conf.local >"$TMPFILE"
-  sudo cp -f "$TMPFILE" "/etc/bind/named.conf.local"
-  rm -r "$TMPFILE"
-
   #
   # GET MASTER IP (SECONDARY DNS SERVER)
   #
@@ -317,7 +312,7 @@ In the following section, you enter the master Ip like so: '10.66.66.44;' (make 
   done
 
   TMPFILE=$(mktemp /tmp/named.conf.local.XXXXXXXX) || exit 1
-  sed -e "s/masterIP/$masterIP2/g" <bind/slave.conf.local >"$TMPFILE"
+  sed -e "s/masterIP/$masterIP2/g" -e "s/domainname/$nameserver/g" <bind/slave.conf.local >"$TMPFILE"
   sudo cp -f "$TMPFILE" "/etc/bind/named.conf.local"
   rm -r "$TMPFILE"
 
