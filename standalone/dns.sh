@@ -349,13 +349,18 @@ zone_add() {
 
     TMPFILE=$(mktemp /tmp/named.conf.XXXXXXX) || exit 1
     cat "$named_local" >"$TMPFILE"
+
+    zoneType=master
+    if yes_no "Are you currently adding zone via secondary server? "; then
+      zoneType=slave
+    fi
     #
     #   A zone is a domain name that is referenced in the DNS server.
     #
     echo "
 // Forward Zone File of $websitename
 zone \"$websitename\" {
-    type master;
+    type $zoneType;
     file \"/etc/bind/db.$websitename\";
 };" >>"$TMPFILE"
 
