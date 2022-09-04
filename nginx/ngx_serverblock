@@ -44,20 +44,14 @@ server {
         }
 
         # NGINX X-Accel Download Redirection Settings
-        location /download {
+        location /download_file_path_987654321 {
            internal;
             alias /var/www/tonics/private;
         }
 
-        # NGINX X-Accel For Themes
-        location /themes {
+        # NGINX X-Accel For Apps
+        location /apps_file_path_987654321 {
              internal;
-             alias /var/www/tonics/web/src/Themes;
-        }
-
-        # NGINX X-Accel For Plugins
-        location /plugins {
-             internal;
-             alias /var/www/tonics/web/src/Plugins;
+             alias /var/www/tonics/web/src/Apps;
         }
 }

@@ -154,7 +154,7 @@ fi
   installMariadb
   installPhp
 
-  # Install CP or WP
+  # Install tonics
   install_tonics
 }
 
@@ -305,7 +305,7 @@ MYSQL_SCRIPT
         resetFilePermissions
 
         #
-        #   Writing ClassicPress config file with collected config data
+        #   Writing Tonics config file with collected config data
         #
 
         echo -e "Writing Tonics config file with collected config data...\n"
@@ -313,6 +313,10 @@ MYSQL_SCRIPT
         sed -i "s/db_databasename_here/$TonicsDBName/" /var/www/"$websitename"/web/.env
         sed -i "s/db_username_here/$TonicsUser/" /var/www/"$websitename"/web/.env
         sed -i "s/db_password_here/$TonicsPass/" /var/www/"$websitename"/web/.env
+
+        # Installation Key
+        TonicsInstallationKey="$(xxd -l30 -ps /dev/urandom)"
+        sed -i "s/install_key_here/$TonicsInstallationKey/" /var/www/"$websitename"/web/.env
 
         progress_bar
         # reload nginx
@@ -327,11 +331,12 @@ MYSQL_SCRIPT
                 1) Tonics Database Name: $TonicsDBName
                 2) Tonics Database User: $TonicsUser
                 3) Tonics Database User Password: $TonicsPass
+                4) Tonics Installation Key: $TonicsInstallationKey
                 Save this in a secret place.
                 !!
                 You can reach me at https://devsrealm.com/
                 !!
-                Welcome to the Tonics communtity, if you need support, please head over to forum.tonics.app
+                Welcome to the Tonics community, if you need support, please head over to forum.tonics.app
                 " | boxes -d ian_jones
 
         exit 0
