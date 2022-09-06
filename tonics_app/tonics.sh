@@ -300,8 +300,6 @@ MYSQL_SCRIPT
         #
         #   Change directory and file user and group to www-data
         #
-
-        sudo useradd "$onlysitename"
         resetFilePermissions
 
         #

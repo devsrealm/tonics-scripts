@@ -193,6 +193,10 @@ askForOnlySiteName() {
           if [ "$onlysitename" != "$onlysitename2" ]; then
             echo -e "Site name doesn't match"
           else
+             # creaate user if it doesn't exist
+             if ! id -u $onlysitename > /dev/null 2>&1; then
+               sudo useradd "$onlysitename"
+             fi
             echo -e "Matches, Moving On..."
             break
           fi
