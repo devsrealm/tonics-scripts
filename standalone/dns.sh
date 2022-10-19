@@ -207,6 +207,9 @@ Creating the Zone File Configuration
   echo -e "What do you want to use for your secondary nameserver i.e ns2.$nameserver \c: "
   read -r ns2
 
+  ns1Prefix="${ns1%%.*}"
+  ns2Prefix="${ns2%%.*}"
+
   zone_file=/etc/bind/db.$nameserver
   echo -e "Preparing Zone File\n"
   TMPFILE=$(mktemp /tmp/zone.conf.XXXXXXX) || exit 1
@@ -233,8 +236,8 @@ Creating the Zone File Configuration
 @       IN      NS      $ns1.
 @       IN      NS      $ns2.
 @       IN      A       $ip
-ns1     IN      A       $ip
-ns2     IN      A       $ip
+$ns1Prefix     IN      A       $ip
+$ns2Prefix     IN      A       $ip
 www     IN      A       $ip
 ftp     IN      A       $ip
 mail    IN      A       $ip
