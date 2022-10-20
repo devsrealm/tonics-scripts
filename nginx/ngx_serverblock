@@ -49,6 +49,12 @@ server {
             alias /var/www/tonics/private;
         }
 
+        # NGINX X-Accel For Modules
+        location /modules_file_path_987654321 {
+             internal;
+             alias /var/www/tonics/web/src/Modules;
+        }
+
         # NGINX X-Accel For Apps
         location /apps_file_path_987654321 {
              internal;
