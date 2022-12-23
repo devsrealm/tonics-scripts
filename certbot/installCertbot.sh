@@ -40,7 +40,7 @@ issueSSLCert() {
   echo -e "Your Email Address For Certbot Certificate: \c"
   read -r email
 
-  echo -e "By default, we would issue certificate for $websitename and www.$websitename, enter more with space for each one or hit enter to omit \c"
+  echo -e "By default, we would issue certificate for $websitename and www.$websitename, enter more (comma separated if more than one) or hit enter to omit \c"
   read -r more_certbot_website_address
 
   certbot --nginx -d "$websitename,www.$websitename,$more_certbot_website_address" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
