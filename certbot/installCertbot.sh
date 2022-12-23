@@ -39,8 +39,14 @@ issueSSLCert() {
   install_certbot
   echo -e "Your Email Address For Certbot Certificate: \c"
   read -r email
-  certbot --nginx -d "*.$websitename" -d "$websitename" -m "$email" --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
-  handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
+
+  if yes_no "Do you want to issue a wildcard certificate (Enter N if you don't know what it means)"; then
+    certbot --agree-tos --email "$email" --manual --preferred-challenges=dns -d "*.$websitename" --server https://acme-v02.api.letsencrypt.org/directory
+  else
+    certbot --nginx -d "$websitename" -d "www.$websitename" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
+    handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
+  fi
+
   echo -e "Done\n"
   systemctl restart nginx
 }
