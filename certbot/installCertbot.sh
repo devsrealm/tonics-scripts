@@ -39,7 +39,7 @@ issueSSLCert() {
   install_certbot
   echo -e "Your Email Address For Certbot Certificate: \c"
   read -r email
-  certbot --nginx -d "*.$websitename" -d "$websitename" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
+  certbot --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory  --nginx -d "*.$websitename" -d "$websitename" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
   handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
   echo -e "Done\n"
   systemctl restart nginx
