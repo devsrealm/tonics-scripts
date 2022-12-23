@@ -40,12 +40,11 @@ issueSSLCert() {
   echo -e "Your Email Address For Certbot Certificate: \c"
   read -r email
 
-  if yes_no "Do you want to issue a wildcard certificate (Enter N if you don't know what it means)"; then
-    certbot --agree-tos --email "$email" --manual --preferred-challenges=dns -d "*.$websitename" --server https://acme-v02.api.letsencrypt.org/directory
-  else
-    certbot --nginx -d "$websitename" -d "www.$websitename" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
-    handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
-  fi
+  echo -e "By default, we would issue certificate for $websitename and www.$websitename, enter more with space for each one or hit enter to omit \c"
+  read -r more_certbot_website_address
+
+  certbot --nginx -d "$websitename,www.$websitename,$more_certbot_website_address" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
+  handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
 
   echo -e "Done\n"
   systemctl restart nginx
