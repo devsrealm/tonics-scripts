@@ -43,8 +43,13 @@ issueSSLCert() {
   echo -e "By default, we would issue certificate for $websitename and www.$websitename, enter more (comma separated if more than one) or hit enter to omit \c"
   read -r more_certbot_website_address
 
-  certbot --nginx -d "$websitename,www.$websitename,$more_certbot_website_address" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
-  handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
+  if [ "$more_certbot_website_address" != "" ]; then
+    certbot --nginx -d "$websitename,www.$websitename,$more_certbot_website_address" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
+    handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
+  else
+    certbot --nginx -d "$websitename,www.$websitename" -m "$email" --agree-tos --redirect --hsts --staple-ocsp --non-interactive 2>>"${logfile}" >/dev/null &
+    handleError $? "Couldn't Issue $websitename a Free Let's Encrypt Certificate"
+  fi
 
   echo -e "Done\n"
   systemctl restart nginx
