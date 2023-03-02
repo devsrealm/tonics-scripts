@@ -15,24 +15,27 @@ installNginx() {
     #
     echo
     echo -e "Nginx Seems To Be Missing\n"
+    # Install Util
+    sudo apt-get -y install apt-transport-https lsb-release ca-certificates wget gnupg2 debian-archive-keyring >/dev/null &
+    wait $!
     if yes_no "Install Nginx Web Server"; then
+
       echo -e "Installing Nginx From The Official Nginx Repo"
-      sudo wget https://nginx.org/keys/nginx_signing.key 2>>"${logfile}" >/dev/null &
-      wait $!
-      sudo apt-key add nginx_signing.key 2>>"${logfile}" >/dev/null &
+      sudo wget -qO - https://cs.nginx.com/static/keys/nginx_signing.key | gpg --dearmor \
+          | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg 2>>"${logfile}" >/dev/null &
       wait $!
 
       #   We add the below lines to sources.list to name the repositories
       #   from which the NGINX Open Source source can be obtained:
       #   The lsb_release automatically adds the distro codename
-      echo "deb http://nginx.org/packages/mainline/debian $(lsb_release -cs) nginx" |
-        sudo tee -a /etc/apt/sources.list >/dev/null &
-      wait $!
+      echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
+      http://nginx.org/packages/mainline/debian $(lsb_release -cs) nginx" \
+          | sudo tee /etc/apt/sources.list.d/nginx.list >/dev/null &
 
-      echo "deb-src http://nginx.org/packages/mainline/debian $(lsb_release -cs) nginx" |
-        sudo tee -a /etc/apt/sources.list >/dev/null &
-      wait $!
+      echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
+          | sudo tee /etc/apt/preferences.d/99nginx >/dev/null &
 
+      # Install Nginx Package
       sudo apt-get update 2>>"${logfile}" >/dev/null &
       wait $!
       sudo apt-get -y install nginx 2>>"${logfile}" >/dev/null &

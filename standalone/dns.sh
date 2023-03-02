@@ -542,7 +542,7 @@ generate_dkim_key() {
     echo "*.$websitename" >>/etc/opendkim/trusted.hosts # Any domain that originates from this would be trusted
 
     echo -e "Generating Public and Private Keys For The Domain"
-    sudo opendkim-genkey -b 2048 -d "$websitename" -D /etc/opendkim/keys/"$websitename" -s default -v
+    sudo opendkim-genkey -b 1024 -d "$websitename" -D /etc/opendkim/keys/"$websitename" -s default -v
     sudo chown opendkim:opendkim /etc/opendkim/keys/"$websitename"/default.private
 
     echo "
@@ -576,7 +576,6 @@ The dkim key is: $dkimKey
         service bind9 restart
         return 0
       fi
-
     else
       echo "
 The key is: $dkimKey

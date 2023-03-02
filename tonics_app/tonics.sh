@@ -285,6 +285,35 @@ MYSQL_SCRIPT
         sudo rm -f /var/www/html/index.nginx-debian.html &
         wait $!
         handleError $? "Couldn't Remove The Temporary Nginx File (/var/www/html/index.nginx-debian.html)"
+
+
+        echo
+        echo -e "Setting Up $websitename SystemD Services..\n"
+        # sudo cp -f systemd/service_name.service /etc/systemd/system/"$websitename""_tonics".service
+        # sudo cp -f systemd/service_name-watcher.service /etc/systemd/system/"$websitename""_tonics-watcher".service
+        # sudo cp -f systemd/service_name-watcher.path /etc/systemd/system/"$websitename""_tonics-watcher".path
+
+        systemd_service_name="${websitename}_tonics"
+
+        # Adjusting The Hard-Coded Name
+        TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
+        sed -e "s#/path/to/tonics/web#/var/www/$websitename/web#g" -e "s#tonics.log#$websitename.tonics.log" -e "s#tonics.err#$websitename.tonics.err" <systemd/service_name.service >"$TMPFILE"
+        sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name.service"
+
+        TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
+        sed -e "s#service_name.service#$systemd_service_name.service#g" <systemd/service_name-watcher.service >"$TMPFILE"
+        sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name-watcher.service"
+
+        TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
+        sed -e "s#/path/to/tonics/web/bin#/var/www/$websitename/web/bin#g" <systemd/service_name-watcher.path >"$TMPFILE"
+        sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name-watcher.path"
+
+        echo -e "Restarting $websitename SystemD Services..\n"
+        systemctl daemon-reload
+        # -- now enable start and enable the service
+        systemctl --now enable "$systemd_service_name.service"
+        systemctl --now enable "$systemd_service_name-watcher.{path,service}"
+
         echo
         echo -e "Adjusting file and directory permissions..\n"
 
