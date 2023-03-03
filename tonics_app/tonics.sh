@@ -296,23 +296,49 @@ MYSQL_SCRIPT
         systemd_service_name="${websitename}_tonics"
 
         # Adjusting The Hard-Coded Name
-        TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
-        sed -e "s#/path/to/tonics/web#/var/www/$websitename/web#g" -e "s#tonics.log#$websitename.tonics.log" -e "s#tonics.err#$websitename.tonics.err" <systemd/service_name.service >"$TMPFILE"
-        sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name.service"
+
+        # Creating temporary file
+        TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || {
+            echo "Error: Failed to create temporary file"
+            exit 1
+        }
+        # Replacing hard-coded values with variables
+        sed -e "s|/path/to/tonics/web|/var/www/$websitename/web|g" \
+            -e "s|tonics.log|$websitename.tonics.log|g" \
+            -e "s|tonics.err|$websitename.tonics.err|g" \
+            < systemd/service_name.service > "$TMPFILE"
+
+        # Copying the file to the target directory
+        if sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name.service"; then
+            echo "Service file successfully updated"
+        else
+            echo "Error: Failed to copy service file"
+            exit 1
+        fi
+
+        # Cleaning up temporary file
+        rm -f "$TMPFILE"
 
         TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
-        sed -e "s#service_name.service#$systemd_service_name.service#g" <systemd/service_name-watcher.service >"$TMPFILE"
+        sed -e "s|service_name.service|$systemd_service_name.service|g" <systemd/service_name-watcher.service >"$TMPFILE"
         sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name-watcher.service"
 
+        # Cleaning up temporary file
+        rm -f "$TMPFILE"
+
         TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
-        sed -e "s#/path/to/tonics/web/bin#/var/www/$websitename/web/bin#g" <systemd/service_name-watcher.path >"$TMPFILE"
+        sed -e "s|/path/to/tonics/web/bin|/var/www/$websitename/web/bin|g" <systemd/service_name-watcher.path >"$TMPFILE"
         sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name-watcher.path"
+
+        # Cleaning up temporary file
+        rm -f "$TMPFILE"
 
         echo -e "Restarting $websitename SystemD Services..\n"
         systemctl daemon-reload
         # -- now enable start and enable the service
         systemctl --now enable "$systemd_service_name.service"
-        systemctl --now enable "$systemd_service_name-watcher.{path,service}"
+        systemctl --now enable "$systemd_service_name-watcher.service"
+        systemctl --now enable "$systemd_service_name-watcher.path"
 
         echo
         echo -e "Adjusting file and directory permissions..\n"
