@@ -303,10 +303,10 @@ MYSQL_SCRIPT
             exit 1
         }
         # Replacing hard-coded values with variables
-        sed -e "s|/path/to/tonics/web|/var/www/$websitename/web|g" \
-            -e "s|tonics.log|$websitename.tonics.log|g" \
-            -e "s|tonics.err|$websitename.tonics.err|g" \
-            < systemd/service_name.service > "$TMPFILE"
+        sed -e "s#/path/to/tonics/web#/var/www/$websitename/web#g" \
+            -e "s#tonics.log#$websitename\.tonics.log#g" \
+            -e "s#tonics.err#$websitename\.tonics.err#g" \
+            <systemd/service_name.service >"$TMPFILE"
 
         # Copying the file to the target directory
         if sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name.service"; then
@@ -320,14 +320,14 @@ MYSQL_SCRIPT
         rm -f "$TMPFILE"
 
         TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
-        sed -e "s|service_name.service|$systemd_service_name.service|g" <systemd/service_name-watcher.service >"$TMPFILE"
+        sed -e "s#service_name.service#$systemd_service_name.service#g" <systemd/service_name-watcher.service >"$TMPFILE"
         sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name-watcher.service"
 
         # Cleaning up temporary file
         rm -f "$TMPFILE"
 
         TMPFILE=$(mktemp /tmp/spool.XXXXXXXX) || exit 1
-        sed -e "s|/path/to/tonics/web/bin|/var/www/$websitename/web/bin|g" <systemd/service_name-watcher.path >"$TMPFILE"
+        sed -e "s#/path/to/tonics/web/bin#/var/www/$websitename/web/bin#g" <systemd/service_name-watcher.path >"$TMPFILE"
         sudo cp -f "$TMPFILE" "/etc/systemd/system/$systemd_service_name-watcher.path"
 
         # Cleaning up temporary file
