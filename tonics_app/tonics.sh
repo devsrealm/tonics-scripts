@@ -306,6 +306,7 @@ MYSQL_SCRIPT
         sed -e "s#/path/to/tonics/web#/var/www/$websitename/web#g" \
             -e "s#tonics.log#$websitename\.tonics.log#g" \
             -e "s#tonics.err#$websitename\.tonics.err#g" \
+            -e "s#onlysitename#$onlysitename#g" \
             <systemd/service_name.service >"$TMPFILE"
 
         # Copying the file to the target directory

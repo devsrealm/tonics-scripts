@@ -20,6 +20,8 @@ After=network.target
 
 [Service]
 Type=simple
+User=onlysitename
+Group=onlysitename
 ExecStart=/usr/bin/php8.1 bin/console --run --onStartUp=parallel
 WorkingDirectory=/path/to/tonics/web
 Restart=always
