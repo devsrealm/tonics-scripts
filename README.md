@@ -17,6 +17,10 @@ The installation is easy:
 
 > ssh root@yourserver
 
+### If you do not have git install, please do with
+
+> apt install git
+
 ### Download The Program, and Change Your Diretory To The Program Directory 
 
 > git clone https://github.com/devsrealm/tonics-scripts.git && cd tonics-scripts
